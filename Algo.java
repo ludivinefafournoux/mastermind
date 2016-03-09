@@ -41,6 +41,10 @@ public class Algo {
 		
 		System.out.println("Le nombre de pion bien placé est"+redflag);
 		System.out.println("Le nombre de pion mal placé est"+whiteflag);
+		for(int z=0;z<4;z++){
+			match[z]=0;
+		}
+		
 	}
 		
 		
