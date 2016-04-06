@@ -1,10 +1,7 @@
-package com.example.julien.mon_projet;
+package mastermind.lj.unice.fr.mastermindgame;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,7 +14,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
 
     private EditText choix1;
@@ -45,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     String[] tab={"1","2","3"};
 
 
-    //Fonction qui gÃ©nÃ¨re 4 nombres alÃ©atoires
+    //Fonction qui génère 4 nombres aléatoires
     public int nbrand() {
         Random rand = new Random();
         int nb = (rand.nextInt(9 - 1)) + 1;
@@ -56,12 +53,12 @@ public class MainActivity extends AppCompatActivity {
 
     //Fonction qui compare la solution et la proposition
     public void comparer(View v) {
-        //On lie les EditText Ã  un objet
+        //On lie les EditText à un objet
         choix1 = (EditText) findViewById(R.id.choix1);
         choix2 = (EditText) findViewById(R.id.choix2);
         choix3 = (EditText) findViewById(R.id.choix3);
         choix4 = (EditText) findViewById(R.id.choix4);
-        //On rÃ©cupÃ¨re les valeurs des champs
+        //On récupère les valeurs des champs
         String a = choix1.getText().toString();
         String b = choix2.getText().toString();
         String c = choix3.getText().toString();
@@ -78,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         prop[3] = dd;
 
 
-        //On boucle pour voir s'il y a un pion bien placÃ© en vÃ©rifiant si solution[i]==prop[i]
+        //On boucle pour voir s'il y a un pion bien placé en vérifiant si solution[i]==prop[i]
         for (int i = 0; i < 4; i++) {
             //Si oui, on marque le drapeau rouge
             if (solution[i] == prop[i]) {
@@ -87,11 +84,11 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        //On boucle pour voir s'il y a d'autres pions mal placÃ©s
+        //On boucle pour voir s'il y a d'autres pions mal placés
         for (int u = 0; u < 4; u++) {
             for (int y = 0; y < 4; y++) {
-                //Si match[a]==0, cela veut dire qu'on a pas trouvÃ© prÃ©cÃ©demment que solution[i]==prop[i]
-                //Si on trouve qu'un des nombres restants dans prop est prÃ©sent dans solution, et qu'il ne se trouve pas au mÃªme rang dans le 2 tableau, alors la condition est valide
+                //Si match[a]==0, cela veut dire qu'on a pas trouvé précédemment que solution[i]==prop[i]
+                //Si on trouve qu'un des nombres restants dans prop est présent dans solution, et qu'il ne se trouve pas au même rang dans le 2 tableau, alors la condition est valide
                 if (prop[u] == solution[y] && match[y] == 0) {
                     whiteflag = whiteflag + 1;
                 }
@@ -104,9 +101,9 @@ public class MainActivity extends AppCompatActivity {
             tab[1]=tab[1]+Integer.toString(prop[n]);
         }
 
-        affich.setText("Pions bien placÃ©s" + redflag + ", Pions mal placÃ©s" + whiteflag);
+        affich.setText("Pions bien placés" + redflag + ", Pions mal placés" + whiteflag);
 
-        //Remets les pions bien/mal placÃ©s Ã  0
+        //Remets les pions bien/mal placés à 0
         for (int z = 0; z < 4; z++) {
             match[z] = 0;
 
@@ -121,19 +118,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
         lv=(ListView) findViewById(R.id.coups);
         modelelv=new ArrayList<>();
         adapteur=new ArrayAdapter<Integer>(this,
@@ -142,11 +126,11 @@ public class MainActivity extends AppCompatActivity {
         lv.setAdapter(adapteur);
 
 /*
-        //LiÃ© au l'adapteur pour modifier la liste
+        //Lié au l'adapteur pour modifier la list
         lv.setAdapter(myarrayAdapter);
 */
 
-        //Genere la solution alÃ©toirement
+        //Genere la solution alétoirement
         // -------------------> IL FAUDRA REMPLACER test[x] PAR solution[x] PLUS TARD, J'UTILISE UN TABLEAU CONNU POUR VERIFIER L'ALGO <--------------------
         for (int x = 0; x < 4; x++) {
             test[x] = nbrand();

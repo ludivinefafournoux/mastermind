@@ -1,4 +1,4 @@
-package com.example.julien.mon_projet;
+package mastermind.lj.unice.fr.mastermindgame;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
