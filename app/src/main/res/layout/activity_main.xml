@@ -7,24 +7,54 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!--<TableRow-->
-            <!--android:layout_width="100dp"-->
-            <!--android:layout_height="500dp" >-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp">
+            <GridLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/solutions"
+                android:visibility="invisible"
+                android:columnCount="4"
+                android:rowCount="1" >
 
-            <!--<ImageView-->
-                <!--android:layout_width="100dp"-->
-                <!--android:layout_height="50dp"-->
-                <!--android:id="@+id/imageMastermind" />-->
-        <!--</TableRow>-->
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="10dp"
+                android:id="@+id/solution0" />
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="10dp"
+                android:id="@+id/solution1" />
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="10dp"
+                android:id="@+id/solution2" />
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="10dp"
+                android:id="@+id/solution3" />
+
+            </GridLayout>
+        </RelativeLayout>
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
+            android:layout_height="wrap_content">
 
             <ListView
                 android:layout_width="wrap_content"
-                android:layout_height="280dp"
+                android:layout_height="200dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:id="@+id/coups"
@@ -99,14 +129,25 @@
             android:layout_marginTop="20dp">
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="16dp"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
                 android:id="@+id/affich" />
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="16dp"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
                 android:layout_below="@id/affich"
-                android:id="@+id/historic" />
+                android:id="@+id/restant" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/restant"
+                android:id="@+id/reset"
+                android:layout_centerHorizontal="true"
+                android:visibility="invisible"
+                android:onClick="resetGame"
+                android:text="Nouvelle Partie"/>
         </RelativeLayout>
     </TableLayout>
 

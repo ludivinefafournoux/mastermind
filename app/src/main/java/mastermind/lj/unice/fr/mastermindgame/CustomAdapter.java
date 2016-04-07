@@ -22,7 +22,6 @@ public class CustomAdapter extends BaseAdapter{
     private static LayoutInflater inflater=null;
 
     public CustomAdapter(MainActivity mainActivity, List<String> historic, int[] images) {
-        // TODO Auto-generated constructor stub
         this.result = historic;
         this.context = mainActivity;
         this.images = images;
@@ -31,19 +30,16 @@ public class CustomAdapter extends BaseAdapter{
     }
     @Override
     public int getCount() {
-        // TODO Auto-generated method stub
         return result.size();
     }
 
     @Override
     public Object getItem(int position) {
-        // TODO Auto-generated method stub
         return position;
     }
 
     @Override
     public long getItemId(int position) {
-        // TODO Auto-generated method stub
         return position;
     }
 
@@ -58,7 +54,7 @@ public class CustomAdapter extends BaseAdapter{
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        // TODO Auto-generated method stub
+
         Holder holder=new Holder();
         View rowView;
         rowView = inflater.inflate(R.layout.list_element, null);
@@ -84,8 +80,7 @@ public class CustomAdapter extends BaseAdapter{
         rowView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
-                Toast.makeText(context, "You Clicked "+result.get(position), Toast.LENGTH_LONG).show();
+                //Toast.makeText(context, "You Clicked "+result.get(position), Toast.LENGTH_LONG).show();
             }
         });
         return rowView;
