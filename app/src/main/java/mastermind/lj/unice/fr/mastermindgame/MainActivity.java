@@ -1,17 +1,25 @@
 package mastermind.lj.unice.fr.mastermindgame;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,19 +31,22 @@ import java.util.Random;
 public class MainActivity extends Activity {
 
 
-    private ImageView choix1;
-    private ImageView choix2;
-    private ImageView choix3;
-    private ImageView choix4;
-    private int compteur;
-    private Button valider;
-    private  Map<Integer,Integer> mapImage;
+    private int[] arr_images= {
+        R.drawable.bleu,
+        R.drawable.rouge,
+        R.drawable.jaune,
+        R.drawable.vert
+    };
+
+    String[] strings = {"Bleu","Rouge",
+            "Jaune", "Vert"};
+
     private int redflag = 0;
     private int whiteflag = 0;
 
     private ListView lv;
-    private ArrayList<Integer> modelelv;
-    private ArrayAdapter<Integer> adapteur;
+    private List<String> historic;
+    private CustomAdapter customAdapter;
 
     //Tab qui va prendre la proposition de l'user
     private int prop[] = {0, 0, 0, 0};
@@ -58,65 +69,23 @@ public class MainActivity extends Activity {
 
     }
 
-    private void initListeImage(){
-        mapImage = new HashMap<>();
 
-        mapImage.put(0,R.drawable.bleu);
-        mapImage.put(1,R.drawable.vert);
-        mapImage.put(2,R.drawable.rouge);
-        mapImage.put(3,R.drawable.jaune);
-
-        choix1 = (ImageView) findViewById(R.id.choix1);
-        choix2 = (ImageView) findViewById(R.id.choix2);
-        choix3 = (ImageView) findViewById(R.id.choix3);
-        choix4 = (ImageView) findViewById(R.id.choix4);
-
-        choix1.setImageResource(mapImage.get(0));
-        choix2.setImageResource(mapImage.get(1));
-        choix3.setImageResource(mapImage.get(2));
-        choix4.setImageResource(mapImage.get(3));
-    }
-
-    public void changerCouleur(View view){
-
-        if(compteur >= mapImage.size()){
-            compteur = 0;
-        }
-
-        ImageView choix = (ImageView) view;
-        choix.setImageResource(mapImage.get(compteur));
-        ++compteur;
-    }
-
-
-    //Fonction qui compare la solution et la proposition
+    /**
+     * Fonction qui compare la solution et la proposition
+     * @param v Vue
+     */
     public void comparer(View v) {
 
-//        //On lie les EditText à un objet
-//        choix1 = (ImageView) findViewById(R.id.choix1);
-//        choix2 = (ImageView) findViewById(R.id.choix2);
-//        choix3 = (ImageView) findViewById(R.id.choix3);
-//        choix4 = (ImageView) findViewById(R.id.choix4);
-//
-//        choix1.setImageResource(R.drawable.bleu);
-//        //On récupère les valeurs des champs
-////        String a = choix1.getText().toString();
-////        String b = choix2.getText().toString();
-////        String c = choix3.getText().toString();
-////        String d = choix4.getText().toString();
-//        //On parse les champs
-//        int da = Integer.parseInt(a);
-//        int db = Integer.parseInt(b);
-//        int dc = Integer.parseInt(c);
-//        int dd = Integer.parseInt(d);
-        //On range les valeurs dans une tableau
-//        prop[0] = da;
-//        prop[1] = db;
-//        prop[2] = dc;
-//        prop[3] = dd;
+        //Ajouter a l'historique la proposition courante
+        String combinaison = "";
+        for (int entry : prop) {
+            combinaison += Integer.toString(entry) + " ";
+        }
 
-        //Récuperer l'id / le nombre de l'image choisit par l'utilisateur
-
+        historic.add(combinaison);
+        TextView tv = (TextView)findViewById(R.id.historic);
+        String tmp = "Dernier coup joué : " + historic.get(historic.size() -  1);
+        tv.setText(tmp);
 
 
         //On boucle pour voir s'il y a un pion bien placé en vérifiant si solution[i]==prop[i]
@@ -145,7 +114,7 @@ public class MainActivity extends Activity {
             tab[1]=tab[1]+Integer.toString(prop[n]);
         }
 
-        affich.setText("Pions bien placés" + redflag + ", Pions mal placés" + whiteflag);
+        affich.setText("Pions bien placés : " + redflag + ", Pions mal placés : " + whiteflag);
 
         //Remets les pions bien/mal placés à 0
         for (int z = 0; z < 4; z++) {
@@ -155,6 +124,18 @@ public class MainActivity extends Activity {
             whiteflag = 0;
         }
 
+        scrollMyListViewToBottom();
+
+    }
+
+    private void scrollMyListViewToBottom() {
+        lv.post(new Runnable() {
+            @Override
+            public void run() {
+                // Select the last row so it will scroll into view...
+                lv.setSelection(customAdapter.getCount() - 1);
+            }
+        });
     }
 
     @Override
@@ -162,17 +143,11 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        lv=(ListView) findViewById(R.id.coups);
-        modelelv=new ArrayList<>();
-        adapteur=new ArrayAdapter<Integer>(this,
-                android.R.layout.simple_list_item_1,
-                modelelv);
-        lv.setAdapter(adapteur);
+        historic = new ArrayList<>();
 
-/*
-        //Lié au l'adapteur pour modifier la list
-        lv.setAdapter(myarrayAdapter);
-*/
+        lv = (ListView) findViewById(R.id.coups);
+        customAdapter = new CustomAdapter(this,historic,arr_images);
+        lv.setAdapter(customAdapter);
 
         //Genere la solution alétoirement
         // -------------------> IL FAUDRA REMPLACER test[x] PAR solution[x] PLUS TARD, J'UTILISE UN TABLEAU CONNU POUR VERIFIER L'ALGO <--------------------
@@ -181,8 +156,57 @@ public class MainActivity extends Activity {
             System.out.println(test[x]);
         }
 
-        compteur = 0;
-        initListeImage();
+
+        final Spinner mySpinner = (Spinner)findViewById(R.id.spinner);
+        final Spinner mySpinner1 = (Spinner)findViewById(R.id.spinner1);
+        final Spinner mySpinner2 = (Spinner)findViewById(R.id.spinner2);
+        final Spinner mySpinner3 = (Spinner)findViewById(R.id.spinner3);
+
+        mySpinner.setAdapter(new MyAdapter(this, R.layout.row, strings));
+        mySpinner1.setAdapter(new MyAdapter(this, R.layout.row, strings));
+        mySpinner2.setAdapter(new MyAdapter(this, R.layout.row, strings));
+        mySpinner3.setAdapter(new MyAdapter(this, R.layout.row, strings));
+
+        mySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parentView,
+                                       View selectedItemView, int position, long id) {
+                prop[0] = position;
+//                Toast.makeText(MainActivity.this, Integer.toString(MainActivity.this.prop[0]), Toast.LENGTH_SHORT).show();
+            }
+
+            public void onNothingSelected(AdapterView<?> arg0) {// do nothing
+            }
+        });
+        mySpinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parentView,
+                                       View selectedItemView, int position, long id) {
+                prop[1] = position;
+//                Toast.makeText(MainActivity.this, Integer.toString(MainActivity.this.prop[1]), Toast.LENGTH_SHORT).show();
+            }
+
+            public void onNothingSelected(AdapterView<?> arg0) {// do nothing
+            }
+        });
+        mySpinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parentView,
+                                       View selectedItemView, int position, long id) {
+                prop[2] = position;
+//                Toast.makeText(MainActivity.this, Integer.toString(MainActivity.this.prop[2]), Toast.LENGTH_SHORT).show();
+            }
+
+            public void onNothingSelected(AdapterView<?> arg0) {// do nothing
+            }
+        });
+        mySpinner3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parentView,
+                                       View selectedItemView, int position, long id) {
+                prop[3] = position;
+//                Toast.makeText(MainActivity.this, Integer.toString(MainActivity.this.prop[3]), Toast.LENGTH_SHORT).show();
+            }
+
+            public void onNothingSelected(AdapterView<?> arg0) {// do nothing
+            }
+        });
     }
 
     @Override
@@ -205,5 +229,33 @@ public class MainActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public class MyAdapter extends ArrayAdapter<String>{
+
+        public MyAdapter(Context context, int textViewResourceId,   String[] objects) {
+            super(context, textViewResourceId, objects);
+        }
+
+        @Override
+        public View getDropDownView(int position, View convertView,ViewGroup parent) {
+            return getCustomView(position, convertView, parent);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            return getCustomView(position, convertView, parent);
+        }
+
+        public View getCustomView(int position, View convertView, ViewGroup parent) {
+
+            LayoutInflater inflater = getLayoutInflater();
+            View row = inflater.inflate(R.layout.row, parent, false);
+
+            ImageView icon = (ImageView)row.findViewById(R.id.image);
+            icon.setImageResource(arr_images[position]);
+
+            return row;
+        }
     }
 }

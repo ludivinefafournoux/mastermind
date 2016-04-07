@@ -7,30 +7,34 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TableRow
-            android:layout_width="100dp"
-            android:layout_height="500dp" >
+        <!--<TableRow-->
+            <!--android:layout_width="100dp"-->
+            <!--android:layout_height="500dp" >-->
 
-            <ImageView
-                android:layout_width="100dp"
-                android:layout_height="50dp"
-                android:id="@+id/imageMastermind" />
-        </TableRow>
+            <!--<ImageView-->
+                <!--android:layout_width="100dp"-->
+                <!--android:layout_height="50dp"-->
+                <!--android:id="@+id/imageMastermind" />-->
+        <!--</TableRow>-->
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
 
             <ListView
                 android:layout_width="wrap_content"
                 android:layout_height="280dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
                 android:id="@+id/coups"
                 android:visibility="visible" />
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp">
 
             <GridLayout
                 android:layout_width="match_parent"
@@ -38,34 +42,45 @@
                 android:columnCount="5"
                 android:rowCount="3" >
 
-                <ImageView
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/choix1"
+                <Spinner
+                    android:id="@+id/spinner"
+                    android:layout_width="70dp"
+                    android:layout_height="50dp"
                     android:layout_row="1"
                     android:layout_column="0"
-                    android:onClick="changerCouleur"/>
+                    android:drawSelectorOnTop="true"/>
 
-                <ImageView
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/choix2"
+                <Spinner
+                    android:id="@+id/spinner1"
+                    android:layout_width="70dp"
+                    android:layout_height="50dp"
                     android:layout_row="1"
-                    android:layout_column="1" />
+                    android:layout_column="1"
+                    android:drawSelectorOnTop="true"/>
 
-                <ImageView
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/choix3"
+                <Spinner
+                    android:id="@+id/spinner2"
+                    android:layout_width="70dp"
+                    android:layout_height="50dp"
                     android:layout_row="1"
-                    android:layout_column="2" />
+                    android:layout_column="2"
+                    android:drawSelectorOnTop="true" />
 
-                <ImageView
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/choix4"
+                <Spinner
+                    android:id="@+id/spinner3"
+                    android:layout_width="70dp"
+                    android:layout_height="50dp"
                     android:layout_row="1"
-                    android:layout_column="3" />
+                    android:layout_column="3"
+                    android:drawSelectorOnTop="true" />
+
+
+                <!--<ImageView-->
+                    <!--android:layout_width="60dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:id="@+id/choix4"-->
+                    <!--android:layout_row="1"-->
+                    <!--android:layout_column="3" />-->
 
                 <Button
                     style="?android:attr/buttonStyleSmall"
@@ -75,23 +90,24 @@
                     android:id="@+id/valider"
                     android:layout_row="1"
                     android:layout_column="4"
-                    android:layout_marginLeft="50dp"
+                    android:layout_marginLeft="10dp"
                     android:onClick="comparer"
                     android:nestedScrollingEnabled="true" />
             </GridLayout>
         </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+        <RelativeLayout
+            android:layout_marginTop="20dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="16dp"
+                android:id="@+id/affich" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="16dp"
-                android:text="New Text"
-                android:id="@+id/affich"
-                android:layout_column="0" />
-        </TableRow>
+                android:layout_below="@id/affich"
+                android:id="@+id/historic" />
+        </RelativeLayout>
     </TableLayout>
 
 </RelativeLayout>
