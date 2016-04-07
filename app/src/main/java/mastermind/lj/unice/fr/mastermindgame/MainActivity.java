@@ -78,11 +78,12 @@ public class MainActivity extends Activity {
     }
 
     public void changerCouleur(View view){
-        ImageView choix = (ImageButton) view;
 
-        if(compteur > mapImage.size()){
+        if(compteur >= mapImage.size()){
             compteur = 0;
         }
+
+        ImageView choix = (ImageView) view;
         choix.setImageResource(mapImage.get(compteur));
         ++compteur;
     }
