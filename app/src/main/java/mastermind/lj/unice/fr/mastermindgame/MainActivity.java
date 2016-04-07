@@ -34,19 +34,25 @@ public class MainActivity extends Activity {
         R.drawable.bleu,
         R.drawable.rouge,
         R.drawable.jaune,
-        R.drawable.vert
+        R.drawable.vert,
+        R.drawable.cyan,
+        R.drawable.magenta,
+        R.drawable.orange,
+        R.drawable.light_green
     };
 
     String[] strings = {"Bleu","Rouge",
-            "Jaune", "Vert"};
+            "Jaune", "Vert","Cyan","Magenta","Orange","Light Green"};
 
     private int redflag = 0;
     private int whiteflag = 0;
     private final int maxTentative = 10;
-    private final int maxPossibilite = 4;
+    private final int maxColour = 8;
+    private final int maxHoles = 4;
 
     private ListView lv;
-    private List<String> historic;
+    private List<String> historicColor;
+    private List<String> historicScore;
     private CustomAdapter customAdapter;
 
     //Tab qui va prendre la proposition de l'user
@@ -63,11 +69,11 @@ public class MainActivity extends Activity {
 
 
     /**
-     * Fonction qui génère un nombre aléaoire en 1 et maxPossibilite
+     * Fonction qui génère un nombre aléaoire en 1 et maxColour
      */
     public int nbrand() {
         Random rand = new Random();
-        return (rand.nextInt(maxPossibilite));
+        return (rand.nextInt(maxColour));
     }
 
     /**
@@ -78,8 +84,10 @@ public class MainActivity extends Activity {
 
         //Cacher la solution
         gridLayout.setVisibility(View.INVISIBLE);
-        //vider historic
-        historic.clear();
+        //vider historicColor et historicScore
+        historicColor.clear();
+        historicScore.clear();
+        //notifié la liste qu'elle est vide
         ((BaseAdapter) lv.getAdapter()).notifyDataSetChanged();
 
         initCombinaison();
@@ -88,7 +96,7 @@ public class MainActivity extends Activity {
         btn.setEnabled(true);
 
         //Remets les pions bien/mal placés à 0
-        for (int z = 0; z < maxPossibilite; z++) {
+        for (int z = 0; z < maxHoles; z++) {
             match[z] = 0;
         }
         redflag = 0;
@@ -96,7 +104,7 @@ public class MainActivity extends Activity {
 
         //Reset Affichage
         TextView tv = (TextView)findViewById(R.id.restant);
-        String tmp = "Coup restant : " + (maxTentative-historic.size());
+        String tmp = "Coup restant : " + (maxTentative- historicColor.size());
         tv.setText(tmp);
 
         TextView affich = (TextView) findViewById(R.id.affich);
@@ -127,14 +135,14 @@ public class MainActivity extends Activity {
             combinaison += Integer.toString(entry) + " ";
         }
 
-        historic.add(combinaison);
+        historicColor.add(combinaison);
         TextView tv = (TextView)findViewById(R.id.restant);
-        String tmp = "Coup restant : " + (maxTentative-historic.size());
+        String tmp = "Coup restant : " + (maxTentative- historicColor.size());
         tv.setText(tmp);
 
 
         //On boucle pour voir s'il y a un pion bien placé en vérifiant si solution[i]==prop[i]
-        for (int i = 0; i < maxPossibilite; i++) {
+        for (int i = 0; i < maxHoles; i++) {
             //Si oui, on marque le drapeau rouge
             if (solution[i] == prop[i]) {
                 redflag = redflag + 1;
@@ -143,8 +151,8 @@ public class MainActivity extends Activity {
         }
 
         //On boucle pour voir s'il y a d'autres pions mal placés
-        for (int u = 0; u < maxPossibilite; u++) {
-            for (int y = 0; y < maxPossibilite; y++) {
+        for (int u = 0; u < maxHoles; u++) {
+            for (int y = 0; y < maxHoles; y++) {
                 //Si match[a]==0, cela veut dire qu'on a pas trouvé précédemment que solution[i]==prop[i]
                 //Si on trouve qu'un des nombres restants dans prop est présent dans solution, et qu'il ne se trouve pas au même rang dans le 2 tableau, alors la condition est valide
                 if (prop[u] == solution[y] && match[y] == 0) {
@@ -160,13 +168,14 @@ public class MainActivity extends Activity {
         }*/
 
         affich.setText("Pions bien placés : " + redflag + ", Pions mal placés : " + whiteflag);
+        historicScore.add(Integer.toString(redflag)+' '+Integer.toString(whiteflag));
 
         //Scroll tout en bas de la liste
         scrollMyListViewToBottom();
 
 
         //On teste si c'est la bonne solution
-        if(historic.size() >= maxTentative) {
+        if(historicColor.size() >= maxTentative) {
             //Disable Bouton
             btn.setEnabled(false);
             //Affichage du bouton reset
@@ -185,7 +194,7 @@ public class MainActivity extends Activity {
         }
 
         //Remets les pions bien/mal placés à 0
-        for (int z = 0; z < maxPossibilite; z++) {
+        for (int z = 0; z < maxHoles; z++) {
             match[z] = 0;
         }
         redflag = 0;
@@ -219,7 +228,7 @@ public class MainActivity extends Activity {
 
     private void initCombinaison(){
         Log.d("solution","====== Nouveau jeu ======");
-        for (int x = 0; x < maxPossibilite; x++) {
+        for (int x = 0; x < maxHoles; x++) {
             solution[x] = nbrand();
             Log.d("solution",Integer.toString(solution[x]));
         }
@@ -230,13 +239,14 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        historic = new ArrayList<>();
+        historicColor = new ArrayList<>();
+        historicScore = new ArrayList<>();
         btnReset = (Button)findViewById(R.id.reset);
         btn = (Button)findViewById(R.id.valider);
         gridLayout = (GridLayout)findViewById(R.id.solutions);
 
         lv = (ListView) findViewById(R.id.coups);
-        customAdapter = new CustomAdapter(this,historic,arr_images);
+        customAdapter = new CustomAdapter(this, historicColor,arr_images,historicScore);
         lv.setAdapter(customAdapter);
 
         //Genere la solution alétoirement
