@@ -15,22 +15,24 @@ import java.util.List;
 
 public class CustomAdapter extends BaseAdapter{
 
-    private List<String> result;
+    private List<String> historicColor;
+    private List<String> historicScore;
     private Context context;
     private int [] images;
 
     private static LayoutInflater inflater=null;
 
-    public CustomAdapter(MainActivity mainActivity, List<String> historic, int[] images) {
-        this.result = historic;
+    public CustomAdapter(MainActivity mainActivity, List<String> historicColor, int[] images, List<String>historicScore) {
+        this.historicColor = historicColor;
         this.context = mainActivity;
         this.images = images;
+        this.historicScore = historicScore;
         inflater = ( LayoutInflater )context.
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
     @Override
     public int getCount() {
-        return result.size();
+        return historicColor.size();
     }
 
     @Override
@@ -59,7 +61,7 @@ public class CustomAdapter extends BaseAdapter{
         View rowView;
         rowView = inflater.inflate(R.layout.list_element, null);
 
-        String [] tmp = result.get(position).split(" ");
+        String [] tmp = historicColor.get(position).split(" ");
         int[] choix = new int[tmp.length];
         for(int i = 0; i < tmp.length ; ++i){
             choix[i] = Integer.parseInt(tmp[i]);
@@ -71,7 +73,7 @@ public class CustomAdapter extends BaseAdapter{
         holder.img2=(ImageView) rowView.findViewById(R.id.imageView3);
         holder.img3=(ImageView) rowView.findViewById(R.id.imageView4);
 
-        holder.tv.setText(result.get(position));
+        holder.tv.setText(historicScore.get(position));
         holder.img.setImageResource(images[choix[0]]);
         holder.img1.setImageResource(images[choix[1]]);
         holder.img2.setImageResource(images[choix[2]]);
