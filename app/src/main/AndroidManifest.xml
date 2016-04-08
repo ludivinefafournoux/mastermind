@@ -7,7 +7,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
-        <activity android:name="mastermind.lj.unice.fr.principale">
+        <activity android:name=".Principale">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,7 +22,7 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".aide"></activity>
+        <activity android:name=".Aide"></activity>
         <activity android:name=".MainActivity"></activity>
 
     </application>

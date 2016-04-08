@@ -23,12 +23,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
-
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.api.GoogleApiClient;
-
+import android.view.View.OnClickListener;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +36,9 @@ public class MainActivity extends Activity {
     private Button btnReset;
     private Button btn;
     private GridLayout gridLayout;
-    public MediaPlayer mp1;
+
+
+
 
     private int[] arr_images = {
             R.drawable.bleu,
@@ -77,11 +74,7 @@ public class MainActivity extends Activity {
 
     //Tab comprenant la solution
     private int[] solution = {0, 0, 0, 0};
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
+
 
     //private int solution[] = {1, 2, 3, 4};
     //String[] tab={"1","2","3"};
@@ -90,6 +83,7 @@ public class MainActivity extends Activity {
     /**
      * Fonction qui génère un nombre aléaoire en 1 et maxHole
      */
+
     public int nbrand() {
         Random rand = new Random();
         return (rand.nextInt(maxColor));
@@ -260,7 +254,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mp1 = MediaPlayer.create(MainActivity.this, R.raw.sound);
+
         historicColor = new ArrayList<>();
         historicScore = new ArrayList<>();
 
@@ -272,8 +266,27 @@ public class MainActivity extends Activity {
         lv = (ListView) findViewById(R.id.coups);
         customAdapter = new CustomAdapter(this, historicColor, arr_images, historicScore);
         lv.setAdapter(customAdapter);
-        mp1.start();
-        mp1.setLooping(true);
+
+//Met le son en pause et le remet en marche
+        Button on = (Button) this.findViewById(R.id.buttonOn);
+        final MediaPlayer mp = MediaPlayer.create(this, R.raw.sound);
+        mp.start();
+        on.setOnClickListener(new OnClickListener() {
+
+
+                                  public void onClick(View v) {
+                                      if (mp.isPlaying()) {
+                                          mp.pause();
+
+                                      } else {
+
+                                          mp.start();
+                                          mp.setLooping(true);
+                                      }
+                                  }
+                              });
+
+
 
         //Genere la solution alétoirement
         // -------------------> IL FAUDRA REMPLACER solution[x] PAR solution[x] PLUS TARD, J'UTILISE UN TABLEAU CONNU POUR VERIFIER L'ALGO <--------------------
@@ -330,9 +343,6 @@ public class MainActivity extends Activity {
             public void onNothingSelected(AdapterView<?> arg0) {// do nothing
             }
         });
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     @Override
@@ -357,45 +367,6 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "Main Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://mastermind.lj.unice.fr.mastermindgame/http/host/path")
-        );
-        AppIndex.AppIndexApi.start(client, viewAction);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "Main Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://mastermind.lj.unice.fr.mastermindgame/http/host/path")
-        );
-        AppIndex.AppIndexApi.end(client, viewAction);
-        client.disconnect();
-    }
 
     public class MyAdapter extends ArrayAdapter<String> {
 
