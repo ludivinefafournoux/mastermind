@@ -56,13 +56,13 @@ public class MainActivity extends Activity {
     private CustomAdapter customAdapter;
 
     //Tab qui va prendre la proposition de l'user
-    private int prop[] = {0, 0, 0, 0};
+    private int prop[] = new int[maxHoles];
 
     //Tab de match
-    private int match[] = {0, 0, 0, 0};
+    private int match[] = new int[maxHoles];
 
     //Tab comprenant la solution
-    private int [] solution = {0, 0, 0, 0};
+    private int [] solution = new int[maxHoles];
 
     //private int solution[] = {1, 2, 3, 4};
     //String[] tab={"1","2","3"};
@@ -157,6 +157,7 @@ public class MainActivity extends Activity {
                 //Si on trouve qu'un des nombres restants dans prop est présent dans solution, et qu'il ne se trouve pas au même rang dans le 2 tableau, alors la condition est valide
                 if (prop[u] == solution[y] && match[y] == 0) {
                     whiteflag = whiteflag + 1;
+                    match[y] = 1;
                 }
             }
         }
@@ -168,7 +169,7 @@ public class MainActivity extends Activity {
         }*/
 
         affich.setText("Pions bien placés : " + redflag + ", Pions mal placés : " + whiteflag);
-        historicScore.add(Integer.toString(redflag)+' '+Integer.toString(whiteflag));
+        historicScore.add(Integer.toString(redflag) + ' ' + Integer.toString(whiteflag));
 
         //Scroll tout en bas de la liste
         scrollMyListViewToBottom();
